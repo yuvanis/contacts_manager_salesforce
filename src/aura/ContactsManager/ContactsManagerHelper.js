@@ -24,23 +24,24 @@
         action.setCallback(this, function(response){
             const state = response.getState();
             if (state === "SUCCESS") {
-                const result = response.getReturnValue().map((item) => {
+                const records = response.getReturnValue().map((item) => {
                     return Object.assign(
                         {AccountName: item.Account.Name},
                         {OwnerName: item.Owner.Name},
                         {CreatedByName: item.CreatedBy.Name},
                         item)
                 })
-                component.set("v.contactsList", result);
+                component.set("v.contactsList", records);
+                helper.preparationPagination(component, records);
             }
         });
         $A.enqueueAction(action);
     },
 
-    sortBy: function(field, reverse, example) {
-        let key = example
+    sortBy: function(field, reverse, item) {
+        let key = item
             ? function(x) {
-                return example(x[field]);
+                return item(x[field]);
             }
             : function(x) {
                 return x[field];
@@ -61,6 +62,33 @@
         component.set('v.contactsList', cloneData);
         component.set('v.sortDirection', sortDirection);
         component.set('v.sortedBy', sortedBy);
-    }
+        this.setPaginateData(component);
+    },
+
+    preparationPagination: function (component, records) {
+        const countTotalPages = Math.ceil(records.length / component.get("v.pageSize"));
+        const totalPages = countTotalPages > 0 ? countTotalPages : 1;
+        component.set("v.currentPageNumber", 1);
+        component.set("v.totalPages", totalPages);
+        component.set("v.totalRecords", records.length);
+        this.setPaginateData(component);
+    },
+
+    setPaginateData: function(component) {
+        const data = [];
+        const pageNumber = component.get("v.currentPageNumber");
+        const pageSize = component.get("v.pageSize");
+        const contactData = component.get('v.contactsList');
+        let i = (pageNumber - 1) * pageSize;
+        let currentPageCount = i;
+        for (i; i < (pageNumber) * pageSize; i++) {
+            if (contactData[i]) {
+                data.push(contactData[i]);
+                currentPageCount++;
+            }
+        }
+        component.set("v.paginationList", data);
+        component.set("v.currentPageRecords", currentPageCount);
+    },
 
 })

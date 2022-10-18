@@ -1,22 +1,60 @@
 <aura:component controller="ContactsManagerController">
 
     <aura:attribute name="contactsList" type="Contact[]" />
-    <aura:attribute name="columns" type="List"/>
+    <aura:attribute name="columns" type="List" />
     <aura:attribute name="sortDirection" type="String" default="asc" />
     <aura:attribute name="defaultSortDirection" type="String" default="asc" />
     <aura:attribute name="sortedBy" type="String" />
+    <aura:attribute name="paginationList" type="list" />
+    <aura:attribute name="currentPageNumber" type="Integer" default="1" />
+    <aura:attribute name="pageSize" type="Integer" default="10" />
+    <aura:attribute name="totalPages" type="Integer" default="0" />
 
-    <aura:handler name="init" value="{!this}" action="{!c.init}"/>
+    <aura:handler name="init" value="{!this}" action="{!c.init}" />
 
     <lightning:datatable
             keyField="id"
             columns="{!v.columns}"
-            data="{!v.contactsList}"
+            data="{!v.paginationList}"
             hideCheckBoxColumn="true"
             defaultSortDirection="{!v.defaultSortDirection}"
             sortedDirection="{!v.sortDirection}"
             sortedBy="{!v.sortedBy}"
-            onsort="{!c.handleSort}">
-    </lightning:datatable>
+            onsort="{!c.handleSort}" />
+
+    <div class="slds-align_absolute-center">
+        <lightning:button
+                label="First"
+                iconName="utility:left"
+                iconPosition="left"
+                onclick="{!c.toFirst}"
+                disabled="{! v.currentPageNumber == 1}" />
+        <lightning:button
+                label="Previous"
+                disabled="{!v.currentPageNumber == 1}"
+                onclick="{!c.handlePrevious}"
+                variant="brand"
+                iconName="utility:back"
+                name="previous" />
+
+        <span class="slds-badge slds-badge_lightest pagination-text">
+            Page {!v.currentPageNumber} of {!v.totalPages}
+        </span>
+
+        <lightning:button
+                label="Next"
+                disabled="{!v.currentPageNumber == v.totalPages}"
+                onclick="{!c.handleNext}"
+                variant="brand"
+                iconName="utility:forward"
+                iconPosition="right"
+                name="next" />
+        <lightning:button
+                label="Last"
+                iconName="utility:right"
+                iconPosition="right"
+                onclick="{!c.toLast}"
+                disabled="{!v.currentPageNumber == v.totalPages}" />
+    </div>
 
 </aura:component>

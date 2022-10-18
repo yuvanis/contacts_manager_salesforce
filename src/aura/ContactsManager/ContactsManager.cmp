@@ -1,2 +1,13 @@
-<aura:component description="ContactsManager" controller="ContactsManagerController">
+<aura:component controller="ContactsManagerController">
+
+    <aura:attribute name="contactsList" type="Contact[]" />
+    <aura:attribute name="columns" type="List"/>
+
+    <aura:handler name="init" value="{!this}" action="{!c.init}"/>
+
+    <lightning:datatable data="{! v.contactsList }"
+                         columns="{! v.columns }"
+                         keyField="id"
+                         hideCheckboxColumn="true"/>
+
 </aura:component>

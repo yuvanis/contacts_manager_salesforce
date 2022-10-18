@@ -2,12 +2,21 @@
 
     <aura:attribute name="contactsList" type="Contact[]" />
     <aura:attribute name="columns" type="List"/>
+    <aura:attribute name="sortDirection" type="String" default="asc" />
+    <aura:attribute name="defaultSortDirection" type="String" default="asc" />
+    <aura:attribute name="sortedBy" type="String" />
 
     <aura:handler name="init" value="{!this}" action="{!c.init}"/>
 
-    <lightning:datatable data="{! v.contactsList }"
-                         columns="{! v.columns }"
-                         keyField="id"
-                         hideCheckboxColumn="true"/>
+    <lightning:datatable
+            keyField="id"
+            columns="{!v.columns}"
+            data="{!v.contactsList}"
+            hideCheckBoxColumn="true"
+            defaultSortDirection="{!v.defaultSortDirection}"
+            sortedDirection="{!v.sortDirection}"
+            sortedBy="{!v.sortedBy}"
+            onsort="{!c.handleSort}">
+    </lightning:datatable>
 
 </aura:component>

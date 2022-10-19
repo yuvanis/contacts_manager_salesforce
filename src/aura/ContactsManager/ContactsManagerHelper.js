@@ -18,12 +18,12 @@
                     hour12: true
             }}
         ]);
-        const action = component.get("c.fetchContactsData");
+        const action = component.get('c.fetchContactsData');
         action.setParams({
         });
         action.setCallback(this, function(response){
             const state = response.getState();
-            if (state === "SUCCESS") {
+            if (state === 'SUCCESS') {
                 const records = response.getReturnValue().map((item) => {
                     return Object.assign(
                         {AccountName: item.Account.Name},
@@ -31,7 +31,8 @@
                         {CreatedByName: item.CreatedBy.Name},
                         item)
                 })
-                component.set("v.contactsList", records);
+                component.set('v.initContactsList', records);
+                component.set('v.contactsList', records);
                 helper.preparationPagination(component, records);
             }
         });
@@ -57,7 +58,7 @@
     handleSort: function(component, event) {
         const sortedBy = event.getParam('fieldName');
         const sortDirection = event.getParam('sortDirection');
-        const cloneData = component.get("v.contactsList");
+        const cloneData = component.get('v.contactsList');
         cloneData.sort((this.sortBy(sortedBy, sortDirection === 'asc' ? 1 : -1)));
         component.set('v.contactsList', cloneData);
         component.set('v.sortDirection', sortDirection);
@@ -66,18 +67,18 @@
     },
 
     preparationPagination: function (component, records) {
-        const countTotalPages = Math.ceil(records.length / component.get("v.pageSize"));
+        const countTotalPages = Math.ceil(records.length / component.get('v.pageSize'));
         const totalPages = countTotalPages > 0 ? countTotalPages : 1;
-        component.set("v.currentPageNumber", 1);
-        component.set("v.totalPages", totalPages);
-        component.set("v.totalRecords", records.length);
+        component.set('v.currentPageNumber', 1);
+        component.set('v.totalPages', totalPages);
+        component.set('v.totalRecords', records.length);
         this.setPaginateData(component);
     },
 
     setPaginateData: function(component) {
         const data = [];
-        const pageNumber = component.get("v.currentPageNumber");
-        const pageSize = component.get("v.pageSize");
+        const pageNumber = component.get('v.currentPageNumber');
+        const pageSize = component.get('v.pageSize');
         const contactData = component.get('v.contactsList');
         let i = (pageNumber - 1) * pageSize;
         let currentPageCount = i;
@@ -87,8 +88,20 @@
                 currentPageCount++;
             }
         }
-        component.set("v.paginationList", data);
-        component.set("v.currentPageRecords", currentPageCount);
+        component.set('v.paginationList', data);
+        component.set('v.currentPageRecords', currentPageCount);
     },
+
+    searchContact: function (component, value) {
+        const data = component.get('v.initContactsList');
+        const newData = [];
+        for (let i = 0; i < data.length; i++) {
+            if (data[i].Name.toLocaleLowerCase().includes(value.toLowerCase())) {
+                newData.push(data[i]);
+            }
+        }
+        component.set('v.contactsList', newData);
+        this.preparationPagination(component, newData);
+    }
 
 })

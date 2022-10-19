@@ -1,5 +1,6 @@
 <aura:component controller="ContactsManagerController">
 
+    <aura:attribute name="initContactsList" type="Contact[]" />
     <aura:attribute name="contactsList" type="Contact[]" />
     <aura:attribute name="columns" type="List" />
     <aura:attribute name="sortDirection" type="String" default="asc" />
@@ -12,49 +13,73 @@
 
     <aura:handler name="init" value="{!this}" action="{!c.init}" />
 
-    <lightning:datatable
-            keyField="id"
-            columns="{!v.columns}"
-            data="{!v.paginationList}"
-            hideCheckBoxColumn="true"
-            defaultSortDirection="{!v.defaultSortDirection}"
-            sortedDirection="{!v.sortDirection}"
-            sortedBy="{!v.sortedBy}"
-            onsort="{!c.handleSort}" />
+    <lightning:card title="Contacts Manager" iconName="standard:contact">
+        <div class="slds-var-p-around_small">
+            <lightning:layout multipleRows="true" horizontalAlign="center">
+                <lightning:layoutItem padding="around-small" size="12">
+                    <h1 class="slds-text-heading_large">Contacts</h1>
+                    <div class="slds-align_absolute-left slds-p-bottom_small slds-grid slds-gutters"
+                         onkeypress="{!c.startSearch}">
+                        <lightning:input class="slds-size_2-of-6 slds-col"
+                                aura:id="enter-search"
+                                name="enter-search"
+                                label="Please press 'enter' or click the 'Search' button to search the contacts"
+                                type="search" />
+                        <lightning:layoutItem size="12" class="slds-align-bottom slds-col">
+                        <lightning:button
+                                variant="brand"
+                                label="Search"
+                                title="Search"
+                                onclick="{!c.startSearch}" />
+                        </lightning:layoutItem>
+                    </div>
+                    <lightning:datatable
+                        keyField="id"
+                        columns="{!v.columns}"
+                        data="{!v.paginationList}"
+                        hideCheckBoxColumn="true"
+                        defaultSortDirection="{!v.defaultSortDirection}"
+                        sortedDirection="{!v.sortDirection}"
+                        sortedBy="{!v.sortedBy}"
+                        onsort="{!c.handleSort}" />
+                </lightning:layoutItem>
+            </lightning:layout>
 
-    <div class="slds-align_absolute-center">
-        <lightning:button
-                label="First"
-                iconName="utility:left"
-                iconPosition="left"
-                onclick="{!c.toFirst}"
-                disabled="{! v.currentPageNumber == 1}" />
-        <lightning:button
-                label="Previous"
-                disabled="{!v.currentPageNumber == 1}"
-                onclick="{!c.handlePrevious}"
-                variant="brand"
-                iconName="utility:back"
-                name="previous" />
+            <div class="slds-align_absolute-center">
+                <lightning:button
+                        label="First"
+                        iconName="utility:left"
+                        iconPosition="left"
+                        onclick="{!c.toFirst}"
+                        disabled="{!v.currentPageNumber == 1}" />
+                <lightning:button
+                        label="Previous"
+                        disabled="{!v.currentPageNumber == 1}"
+                        onclick="{!c.handlePrevious}"
+                        variant="brand"
+                        iconName="utility:back"
+                        name="previous" />
 
-        <span class="slds-badge slds-badge_lightest pagination-text">
-            Page {!v.currentPageNumber} of {!v.totalPages}
-        </span>
+                <span class="slds-badge slds-badge_lightest pagination-text">
+                    Page {!v.currentPageNumber} of {!v.totalPages}
+                </span>
 
-        <lightning:button
-                label="Next"
-                disabled="{!v.currentPageNumber == v.totalPages}"
-                onclick="{!c.handleNext}"
-                variant="brand"
-                iconName="utility:forward"
-                iconPosition="right"
-                name="next" />
-        <lightning:button
-                label="Last"
-                iconName="utility:right"
-                iconPosition="right"
-                onclick="{!c.toLast}"
-                disabled="{!v.currentPageNumber == v.totalPages}" />
-    </div>
+                <lightning:button
+                        label="Next"
+                        disabled="{!v.currentPageNumber == v.totalPages}"
+                        onclick="{!c.handleNext}"
+                        variant="brand"
+                        iconName="utility:forward"
+                        iconPosition="right"
+                        name="next" />
+                <lightning:button
+                        label="Last"
+                        iconName="utility:right"
+                        iconPosition="right"
+                        onclick="{!c.toLast}"
+                        disabled="{!v.currentPageNumber == v.totalPages}" />
+            </div>
+        </div>
+    </lightning:card>
 
 </aura:component>

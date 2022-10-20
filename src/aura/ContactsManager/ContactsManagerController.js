@@ -32,5 +32,9 @@
             const value = component.find('enter-search').get('v.value');
             helper.searchContact(component, value);
         }
+    },
+
+    toggleModal: function(component, event, helper) {
+        helper.toggleModalStatus(component, event, helper);
     }
 })

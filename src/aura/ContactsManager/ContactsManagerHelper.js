@@ -26,7 +26,7 @@
             if (state === 'SUCCESS') {
                 const records = response.getReturnValue().map((item) => {
                     return Object.assign(
-                        {AccountName: item.Account.Name},
+                        // {AccountName: item.Account.Name},
                         {OwnerName: item.Owner.Name},
                         {CreatedByName: item.CreatedBy.Name},
                         item)
@@ -102,6 +102,12 @@
         }
         component.set('v.contactsList', newData);
         this.preparationPagination(component, newData);
+    },
+
+    toggleModalStatus: function (component, event, helper) {
+        let modalStatus = component.get('v.modal');
+        modalStatus = !modalStatus;
+        component.set('v.modal', modalStatus);
     }
 
 })

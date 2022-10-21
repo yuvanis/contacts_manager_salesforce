@@ -1,5 +1,6 @@
 ({
     fetchContacts : function(component, event, helper) {
+        component.set('v.currentPageNumber', 1);
         component.set('v.columns', [
             {label: 'Name', fieldName:'Name', type: 'text', sortable: true},
             {label: 'Email', fieldName:'Email', type:'email', sortable: true},
@@ -16,6 +17,9 @@
                     minute: '2-digit',
                     second: '2-digit',
                     hour12: true
+            }},
+            {label: 'Del', type: 'action',
+                typeAttributes: { rowActions: [{ label: 'Delete', name: 'delete' }]
             }}
         ]);
         const action = component.get('c.fetchContactsData');
@@ -25,14 +29,22 @@
             const state = response.getState();
             if (state === 'SUCCESS') {
                 const records = response.getReturnValue().map((item) => {
-                    return Object.assign(
-                        // {AccountName: item.Account.Name},
-                        {OwnerName: item.Owner.Name},
-                        {CreatedByName: item.CreatedBy.Name},
-                        item)
+                    if (item.Account) {
+                        return Object.assign(
+                            {AccountName: item.Account.Name},
+                            {OwnerName: item.Owner.Name},
+                            {CreatedByName: item.CreatedBy.Name},
+                            item)
+                    } else {
+                        return Object.assign(
+                            {OwnerName: item.Owner.Name},
+                            {CreatedByName: item.CreatedBy.Name},
+                            item)
+                    }
                 })
                 component.set('v.initContactsList', records);
                 component.set('v.contactsList', records);
+                component.set('v.showSpinner', false);
                 helper.preparationPagination(component, records);
             }
         });
@@ -69,7 +81,9 @@
     preparationPagination: function (component, records) {
         const countTotalPages = Math.ceil(records.length / component.get('v.pageSize'));
         const totalPages = countTotalPages > 0 ? countTotalPages : 1;
-        component.set('v.currentPageNumber', 1);
+        if (component.get('v.currentPageNumber') > totalPages) {
+            component.set('v.currentPageNumber', totalPages);
+        }
         component.set('v.totalPages', totalPages);
         component.set('v.totalRecords', records.length);
         this.setPaginateData(component);
@@ -104,10 +118,37 @@
         this.preparationPagination(component, newData);
     },
 
+    createContact: function (component, event, helper) {
+        this.fetchContacts(component, event, helper)
+        this.toggleModalStatus(component);
+    },
+
     toggleModalStatus: function (component, event, helper) {
         let modalStatus = component.get('v.modal');
         modalStatus = !modalStatus;
         component.set('v.modal', modalStatus);
-    }
+    },
+
+    deleteContact: function (component, event, helper) {
+        const contactRec = event.getParam('row');
+        let action = component.get("c.delContact");
+        action.setParams({
+            "contactRec": contactRec
+        });
+
+        action.setCallback(this, function(response) {
+            if (response.getState() === "SUCCESS" ) {
+                const pageNumber = component.get('v.currentPageNumber');
+                const pageSize = component.get('v.pageSize');
+                const data = component.get('v.contactsList');
+                this.fetchContacts(component, event, helper)
+                component.set('v.contactsList', data);
+                component.set('v.currentPageNumber', pageNumber);
+                component.set('v.pageSize', pageSize);
+            }
+        });
+        $A.enqueueAction(action);
+    },
+
 
 })

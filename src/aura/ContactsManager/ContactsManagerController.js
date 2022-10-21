@@ -36,5 +36,14 @@
 
     toggleModal: function(component, event, helper) {
         helper.toggleModalStatus(component, event, helper);
-    }
+    },
+
+    createNewContact: function(component, event, helper) {
+        helper.createContact(component, event, helper);
+    },
+
+    handleRowAction: function(component, event, helper) {
+        helper.deleteContact(component, event, helper);
+    },
+
 })

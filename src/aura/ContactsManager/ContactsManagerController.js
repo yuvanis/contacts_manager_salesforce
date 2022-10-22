@@ -28,10 +28,7 @@
     },
 
     startSearch: function (component, event, helper) {
-        if (event.keyCode === 13 || event.button === 0) {
-            const value = component.find('enter-search').get('v.value');
-            helper.searchContact(component, value);
-        }
+        helper.fetchContacts(component, event, helper);
     },
 
     toggleModal: function(component, event, helper) {

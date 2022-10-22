@@ -23,7 +23,12 @@
             }}
         ]);
         const action = component.get('c.fetchContactsData');
+        if (event.keyCode === 13 || event.button === 0) {
+            component.set('v.searchValue', component.find('enter-search').get('v.value'));
+        }
+        const searchValue = component.get('v.searchValue');
         action.setParams({
+            "searchValue": searchValue
         });
         action.setCallback(this, function(response){
             const state = response.getState();
@@ -104,18 +109,6 @@
         }
         component.set('v.paginationList', data);
         component.set('v.currentPageRecords', currentPageCount);
-    },
-
-    searchContact: function (component, value) {
-        const data = component.get('v.initContactsList');
-        const newData = [];
-        for (let i = 0; i < data.length; i++) {
-            if (data[i].Name.toLocaleLowerCase().includes(value.toLowerCase())) {
-                newData.push(data[i]);
-            }
-        }
-        component.set('v.contactsList', newData);
-        this.preparationPagination(component, newData);
     },
 
     createContact: function (component, event, helper) {

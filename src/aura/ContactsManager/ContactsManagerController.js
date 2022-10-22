@@ -35,12 +35,20 @@
         helper.toggleModalStatus(component, event, helper);
     },
 
+    closeDeleteModal: function(component, event, helper) {
+        helper.closeDeleteModalStatus(component, event, helper);
+    },
+
     createNewContact: function(component, event, helper) {
         helper.createContact(component, event, helper);
     },
 
     handleRowAction: function(component, event, helper) {
         helper.deleteContact(component, event, helper);
+    },
+
+    submitDelete: function(component, event, helper) {
+        helper.confirmDelete(component, event, helper);
     },
 
 })

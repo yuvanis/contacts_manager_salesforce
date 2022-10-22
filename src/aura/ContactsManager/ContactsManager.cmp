@@ -2,6 +2,7 @@
 
     <aura:attribute name="initContactsList" type="Contact[]" />
     <aura:attribute name="contactsList" type="Contact[]" />
+    <aura:attribute name="contactRecord" type="Contact" />
     <aura:attribute name="columns" type="List" />
     <aura:attribute name="sortDirection" type="String" default="asc" />
     <aura:attribute name="defaultSortDirection" type="String" default="asc" />
@@ -13,6 +14,7 @@
     <aura:attribute name="modal" type="Boolean" default="false" />
     <aura:attribute name="showSpinner" type="Boolean" default="true" />
     <aura:attribute name="searchValue" type="String" default="" />
+    <aura:attribute name="isDelete" type="Boolean" default="false" />
 
     <aura:handler name="init" value="{!this}" action="{!c.init}" />
 
@@ -53,6 +55,27 @@
                                                  sortedBy="{!v.sortedBy}"
                                                  onsort="{!c.handleSort}"
                                                  onrowaction="{!c.handleRowAction}"/>
+                    <aura:if isTrue="{!v.isDelete}">
+
+                        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                            <div class="slds-modal__container">
+                                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                                    <p class="slds-text-heading_medium slds-align_absolute-center">Are you sure to delete this contact?</p>
+                                </div>
+                                <footer class="slds-modal__footer">
+                                    <lightning:button variant="neutral"
+                                                      label="No"
+                                                      title="No"
+                                                      onclick="{!c.closeDeleteModal}"/>
+                                    <lightning:button variant="brand"
+                                                      label="Yes"
+                                                      title="Yes"
+                                                      onclick="{!c.submitDelete}"/>
+                                </footer>
+                            </div>
+                        </section>
+                        <div class="slds-backdrop slds-backdrop_open"></div>
+                    </aura:if>
                 </lightning:layoutItem>
             </lightning:layout>
 

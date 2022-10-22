@@ -47,6 +47,11 @@
                             item)
                     }
                 })
+                if (component.get('v.sortedBy') !== undefined) {
+                    const sortedBy = component.get('v.sortedBy');
+                    const sortDirection = component.get('v.sortDirection');
+                    records.sort((this.sortBy(sortedBy, sortDirection === 'asc' ? 1 : -1)));
+                }
                 component.set('v.initContactsList', records);
                 component.set('v.contactsList', records);
                 component.set('v.showSpinner', false);

@@ -116,11 +116,6 @@
         component.set('v.currentPageRecords', currentPageCount);
     },
 
-    createContact: function (component, event, helper) {
-        this.fetchContacts(component, event, helper)
-        this.toggleModalStatus(component);
-    },
-
     toggleModalStatus: function (component, event, helper) {
         let modalStatus = component.get('v.modal');
         modalStatus = !modalStatus;
@@ -152,10 +147,44 @@
                 component.set('v.contactsList', data);
                 component.set('v.currentPageNumber', pageNumber);
                 component.set('v.pageSize', pageSize);
+                this.showDeleteSuccessMessage();
+            } else {
+                this.showDeleteErrorMessage();
             }
         });
         component.set('v.isDelete', false);
         $A.enqueueAction(action);
+
+    },
+
+    showDeleteSuccessMessage : function() {
+        const toastEvent = $A.get("e.force:showToast");
+        toastEvent.setParams({
+            "type": "success",
+            "title": "Success!",
+            "message": "The contact has been delete successfully."
+        });
+        toastEvent.fire();
+    },
+
+    showDeleteErrorMessage : function() {
+        const toastEvent = $A.get("e.force:showToast");
+        toastEvent.setParams({
+            "type": "error",
+            "title": "Error!",
+            "message": "The contact has not been delete."
+        });
+        toastEvent.fire();
+    },
+
+    showCreateMessage : function() {
+        const toastEvent = $A.get("e.force:showToast");
+        toastEvent.setParams({
+            "type": "success",
+            "title": "Success!",
+            "message": "The contact has been create successfully."
+        });
+        toastEvent.fire();
     }
 
 })

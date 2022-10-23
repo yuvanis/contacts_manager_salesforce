@@ -40,7 +40,9 @@
     },
 
     createNewContact: function(component, event, helper) {
-        helper.createContact(component, event, helper);
+        helper.fetchContacts(component, event, helper);
+        helper.toggleModalStatus(component, event, helper);
+        helper.showCreateMessage();
     },
 
     handleRowAction: function(component, event, helper) {

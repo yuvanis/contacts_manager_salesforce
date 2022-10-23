@@ -1,4 +1,4 @@
-<aura:component controller="ContactsManagerController">
+<aura:component implements="force:appHostable" controller="ContactsManagerController">
 
     <aura:attribute name="initContactsList" type="Contact[]" />
     <aura:attribute name="contactsList" type="Contact[]" />

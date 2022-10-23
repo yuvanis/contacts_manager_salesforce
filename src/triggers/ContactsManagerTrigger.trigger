@@ -1,7 +1,3 @@
-/**
- * Created by yurynistratau on 22.10.22.
- */
-
 trigger ContactsManagerTrigger on Contact (after insert, before delete) {
 
     if (Trigger.isInsert) {
@@ -31,22 +27,14 @@ trigger ContactsManagerTrigger on Contact (after insert, before delete) {
             caseList.add(newCase);
         }
 
-        try {
-            insert caseList;
-        } catch (DmlException e) {
-            System.debug('Error New Contact page : ' + e.getMessage());
-        }
+        insert caseList;
 
     } else if (Trigger.isDelete) {
 
         Set<Id> ContactIDs = Trigger.oldMap.keySet();
         Case delCase = [SELECT Id FROM Case WHERE ContactId IN :ContactIDs];
 
-        try {
-            delete delCase;
-        } catch(DmlException e) {
-            System.debug('Error New Contact page : ' + e.getMessage());
-        }
+        delete delCase;
 
     }
 }

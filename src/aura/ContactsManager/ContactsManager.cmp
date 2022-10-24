@@ -42,7 +42,6 @@
                                               onclick="{!c.toggleModal}" />
                         </lightning:layoutItem>
                     </div>
-
                     <aura:if isTrue="{!v.showSpinner}">
                         <lightning:spinner alternativeText="Loading" size="medium" />
                     </aura:if>
@@ -56,7 +55,6 @@
                                                  onsort="{!c.handleSort}"
                                                  onrowaction="{!c.handleRowAction}"/>
                     <aura:if isTrue="{!v.isDelete}">
-
                         <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
                             <div class="slds-modal__container">
                                 <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">

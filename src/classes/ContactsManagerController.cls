@@ -12,7 +12,7 @@ public class ContactsManagerController {
     }
 
     @AuraEnabled
-    public static void delContact(Contact contactRec){
+    public static void deleteContact(Contact contactRec){
         delete contactRec;
     }
 

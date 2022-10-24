@@ -122,10 +122,6 @@
         component.set('v.modal', modalStatus);
     },
 
-    closeDeleteModalStatus: function (component, event, helper) {
-        component.set('v.isDelete', false);
-    },
-
     deleteContact: function (component, event, helper) {
         component.set('v.isDelete', true);
         component.set('v.contactRecord', event.getParam('row'));
@@ -133,7 +129,7 @@
 
     confirmDelete: function (component, event, helper) {
         const contactRec = component.get('v.contactRecord');
-        let action = component.get("c.delContact");
+        let action = component.get("c.deleteContact");
         action.setParams({
             "contactRec": contactRec
         });

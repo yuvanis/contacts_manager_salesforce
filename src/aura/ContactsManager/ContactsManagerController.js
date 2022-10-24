@@ -36,7 +36,7 @@
     },
 
     closeDeleteModal: function(component, event, helper) {
-        helper.closeDeleteModalStatus(component, event, helper);
+        component.set('v.isDelete', false);
     },
 
     createNewContact: function(component, event, helper) {
